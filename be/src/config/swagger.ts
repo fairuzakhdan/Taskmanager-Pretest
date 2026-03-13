@@ -54,7 +54,7 @@ const options: swaggerJsdoc.Options = {
             id: { type: 'integer', example: 1 },
             title: { type: 'string', example: 'Complete project' },
             description: { type: 'string', example: 'Finish the task manager API' },
-            status: { type: 'string', enum: ['pending', 'in-progress', 'completed'], example: 'pending' },
+            completed: { type: 'boolean', example: false },
             userId: { type: 'integer', example: 1 },
             createdAt: { type: 'string', format: 'date-time' },
             updatedAt: { type: 'string', format: 'date-time' }

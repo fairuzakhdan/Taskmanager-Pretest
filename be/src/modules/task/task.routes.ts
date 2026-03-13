@@ -27,14 +27,9 @@ const router = Router();
  *               description:
  *                 type: string
  *                 example: Finish the task manager API
- *               status:
- *                 type: string
- *                 enum: [pending, in-progress, completed]
- *                 example: pending
  *               completed:
  *                 type: boolean
  *                 example: false
- *                 description: Alternative to status - true for completed, false for pending
  *     responses:
  *       201:
  *         description: Task created successfully
@@ -215,9 +210,8 @@ router.get('/tasks/:id', getTaskById);
  *                 type: string
  *               description:
  *                 type: string
- *               status:
- *                 type: string
- *                 enum: [pending, in-progress, completed]
+ *               completed:
+ *                 type: boolean
  *     responses:
  *       200:
  *         description: Task updated successfully

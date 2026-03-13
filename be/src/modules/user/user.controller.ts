@@ -22,10 +22,10 @@ export const register = async (req: Request, res: Response) => {
       data: { email, password: hashedPassword, name }
     });
 
+    const token = generateToken(user.id);
     const { password: _, ...userWithoutPassword } = user;
-    res.status(201).json(userWithoutPassword);
+    res.status(201).json({ token, user: userWithoutPassword });
   } catch (error) {
-    console.error('Register error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

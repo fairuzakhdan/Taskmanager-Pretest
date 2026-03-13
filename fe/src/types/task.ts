@@ -2,7 +2,7 @@ export interface Task {
   id: string;
   title: string;
   description?: string;
-  status: string;
+  completed: boolean;
   userId: string;
   createdAt: string;
   updatedAt: string;
@@ -11,13 +11,11 @@ export interface Task {
 export interface CreateTaskData {
   title: string;
   description?: string;
-  status?: string;
+  completed?: boolean;
 }
 
 export interface UpdateTaskData {
   title?: string;
   description?: string;
-  status?: string;
+  completed?: boolean;
 }
-
-export type TaskStatus = 'pending' | 'in-progress' | 'completed';

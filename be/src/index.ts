@@ -13,19 +13,34 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// CORS configuration - Allow all origins for development
+// CORS configuration
 app.use(cors({
-  origin: true,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'https://taskmanager-pretest.vercel.app'
+    ];
+    
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // Allow all origins in development
+    return callback(null, true);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
 
 app.use(express.json());
 app.use(requestLogger);
-
-// Add preflight handler
-app.options('*', cors());
 
 app.get('/', (req, res) => {
   res.json({ message: 'Task Manager API', docs: '/api-docs' });
@@ -47,7 +62,6 @@ const server = app.listen(PORT, () => {
 
 server.on('error', (error) => {
   logger.error('Server error:', error);
-  console.error('Server error:', error);
 });
 
 process.on('SIGTERM', () => {

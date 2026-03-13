@@ -1,82 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { taskApi } from '../services/taskApi';
+import { useTasks } from '../hooks/useTasks';
 import type { Task } from '../types';
 import TaskForm from '../components/TaskForm';
 
 export default function Dashboard() {
   const { user, token, logout } = useAuth();
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const { tasks, isLoading, createTask, updateTask, deleteTask } = useTasks(token);
   const [showForm, setShowForm] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
-
-  const fetchTasks = async () => {
-    if (!token) return;
-    
-    try {
-      setLoading(true);
-      const data = await taskApi.getMyTasks(token);
-      setTasks(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch tasks');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleCreateTask = async (taskData: { title: string; description?: string; completed?: boolean }) => {
-    if (!token) return;
-
-    try {
-      await taskApi.createTask(token, taskData);
-      setSuccess('Task created successfully!');
-      setShowForm(false);
-      fetchTasks();
-      setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create task');
-    }
+    await createTask(taskData);
+    setShowForm(false);
   };
 
   const handleUpdateTask = async (id: string, taskData: { title?: string; description?: string; completed?: boolean }) => {
-    if (!token) return;
-
-    try {
-      await taskApi.updateTask(token, id, taskData);
-      setSuccess('Task updated successfully!');
-      setEditingTask(null);
-      fetchTasks();
-      setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to update task');
-    }
+    await updateTask({ id, data: taskData });
+    setEditingTask(null);
   };
 
   const handleDeleteTask = async (id: string) => {
-    if (!token || !confirm('Are you sure you want to delete this task?')) return;
-
-    try {
-      await taskApi.deleteTask(token, id);
-      setSuccess('Task deleted successfully!');
-      fetchTasks();
-      setTimeout(() => setSuccess(''), 3000);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to delete task');
-    }
+    if (!confirm('Are you sure you want to delete this task?')) return;
+    await deleteTask(id);
   };
 
   const handleToggleComplete = async (task: Task) => {
-    await handleUpdateTask(task.id, { completed: !task.completed });
+    await updateTask({ id: task.id, data: { completed: !task.completed } });
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-lg">Loading...</div>
@@ -87,7 +40,6 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="px-4 py-6 sm:px-0">
           <div className="flex justify-between items-center">
             <div>
@@ -103,22 +55,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Messages */}
-        {error && (
-          <div className="mx-4 mb-4 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded">
-            {error}
-            <button onClick={() => setError('')} className="float-right font-bold">×</button>
-          </div>
-        )}
-        
-        {success && (
-          <div className="mx-4 mb-4 bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded">
-            {success}
-            <button onClick={() => setSuccess('')} className="float-right font-bold">×</button>
-          </div>
-        )}
-
-        {/* Create Task Button */}
         <div className="px-4 mb-6">
           <button
             onClick={() => setShowForm(true)}
@@ -128,7 +64,6 @@ export default function Dashboard() {
           </button>
         </div>
 
-        {/* Task Form Modal */}
         {(showForm || editingTask) && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md">
@@ -147,7 +82,6 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Tasks List */}
         <div className="px-4">
           <div className="bg-white shadow overflow-hidden sm:rounded-md">
             {tasks.length === 0 ? (

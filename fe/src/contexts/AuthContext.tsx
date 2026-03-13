@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface User {
   id: string;
@@ -33,6 +34,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
   const API_BASE = 'https://taskmanager-pretest-production.up.railway.app/api';
 
@@ -56,7 +58,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.message || 'Login failed');
+      throw new Error(error.error || error.message || 'Login failed');
     }
 
     const data = await response.json();
@@ -75,7 +77,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.message || 'Registration failed');
+      throw new Error(error.error || error.message || 'Registration failed');
     }
 
     const data = await response.json();
@@ -90,6 +92,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    queryClient.clear();
   };
 
   return (

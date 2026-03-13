@@ -4,23 +4,17 @@ import { prisma } from '../../config/database';
 
 export const createTask = async (req: AuthRequest, res: Response) => {
   try {
-    const { title, description, status, completed } = req.body;
+    const { title, description, completed = false } = req.body;
 
     if (!title) {
       return res.status(400).json({ error: 'Title is required' });
-    }
-
-    // Convert checkbox boolean to status string
-    let taskStatus = status || 'pending';
-    if (completed !== undefined) {
-      taskStatus = completed ? 'completed' : 'pending';
     }
 
     const task = await prisma.task.create({
       data: {
         title,
         description,
-        status: taskStatus,
+        completed,
         userId: req.userId!
       }
     });
@@ -28,6 +22,8 @@ export const createTask = async (req: AuthRequest, res: Response) => {
     res.status(201).json(task);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
+  }
+};
   }
 };
 
@@ -70,7 +66,7 @@ export const getTaskById = async (req: Request, res: Response) => {
 export const updateTask = async (req: AuthRequest, res: Response) => {
   try {
     const id = parseInt(req.params.id as string);
-    const { title, description, status, completed } = req.body;
+    const { title, description, completed } = req.body;
 
     const task = await prisma.task.findUnique({ where: { id } });
     if (!task) {
@@ -81,15 +77,9 @@ export const updateTask = async (req: AuthRequest, res: Response) => {
       return res.status(403).json({ error: 'Not authorized to update this task' });
     }
 
-    // Convert checkbox boolean to status string
-    let taskStatus = status;
-    if (completed !== undefined) {
-      taskStatus = completed ? 'completed' : 'pending';
-    }
-
     const updatedTask = await prisma.task.update({
       where: { id },
-      data: { title, description, status: taskStatus }
+      data: { title, description, completed }
     });
 
     res.json(updatedTask);

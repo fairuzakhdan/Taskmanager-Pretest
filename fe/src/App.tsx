@@ -1,9 +1,8 @@
-
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { useAuth } from './contexts/AuthContext';
 import LoginPage from './pages/LoginPage';
 import Dashboard from './pages/Dashboard';
 
-function AppContent() {
+function App() {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -15,14 +14,6 @@ function AppContent() {
   }
 
   return user ? <Dashboard /> : <LoginPage />;
-}
-
-function App() {
-  return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
-  );
 }
 
 export default App;
