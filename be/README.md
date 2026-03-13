@@ -34,7 +34,7 @@ Aplikasi Task Manager API sederhana untuk mengelola aktivitas harian dengan fitu
 
 ```bash
 git clone <repository-url>
-cd test-indonesia-crypto
+cd be
 ```
 
 ### 2. Install Dependencies
@@ -291,7 +291,7 @@ Content-Type: application/json
 {
   "title": "Complete project",
   "description": "Finish the task manager API",
-  "status": "pending"
+  "status": true
 }
 ```
 
