@@ -20,7 +20,7 @@ export const useTasks = (token: string | null) => {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<Task> }) =>
+    mutationFn: ({ id, data }: { id: number; data: Partial<Task> }) =>
       taskApi.updateTask(token!, id, data),
     onMutate: async ({ id, data }) => {
       await queryClient.cancelQueries({ queryKey: ['tasks'] });
@@ -43,7 +43,7 @@ export const useTasks = (token: string | null) => {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: string) => taskApi.deleteTask(token!, id),
+    mutationFn: (id: number) => taskApi.deleteTask(token!, id),
     onMutate: async (id) => {
       await queryClient.cancelQueries({ queryKey: ['tasks'] });
       const previous = queryClient.getQueryData<Task[]>(['tasks']);

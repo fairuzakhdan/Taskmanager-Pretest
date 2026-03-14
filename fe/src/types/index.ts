@@ -1,1 +1,1 @@
-export type { Task, CreateTaskData, UpdateTaskData, TaskStatus } from './task';
+export type { Task, CreateTaskData, UpdateTaskData } from './task';

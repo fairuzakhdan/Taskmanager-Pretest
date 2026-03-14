@@ -1,26 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { taskApi } from '../services/taskApi';
-
-interface TaskDetail {
-  id: number;
-  title: string;
-  description: string;
-  completed: boolean;
-  userId: number;
-  createdAt: string;
-  updatedAt: string;
-  user: {
-    id: number;
-    name: string;
-    email: string;
-  };
-}
+import type { Task } from '../types';
 
 export default function TaskDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [task, setTask] = useState<TaskDetail | null>(null);
+  const [task, setTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -116,20 +102,24 @@ export default function TaskDetailPage() {
               </span>
             </div>
 
-            <div className="flex items-center gap-2 text-sm">
-              <span className="font-medium text-gray-700">Created by:</span>
-              <button
-                onClick={() => navigate(`/users/${task.user.id}/tasks`)}
-                className="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
-              >
-                👤 {task.user.name}
-              </button>
-            </div>
+            {task.user && (
+              <>
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="font-medium text-gray-700">Created by:</span>
+                  <button
+                    onClick={() => navigate(`/users/${task.user!.id}/tasks`)}
+                    className="text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                  >
+                    👤 {task.user.name}
+                  </button>
+                </div>
 
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <span className="font-medium text-gray-700">Email:</span>
-              <span>✉️ {task.user.email}</span>
-            </div>
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <span className="font-medium text-gray-700">Email:</span>
+                  <span>✉️ {task.user.email}</span>
+                </div>
+              </>
+            )}
 
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <span className="font-medium text-gray-700">Created:</span>

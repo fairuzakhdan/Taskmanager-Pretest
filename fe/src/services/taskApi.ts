@@ -20,7 +20,7 @@ export const taskApi = {
   },
 
   // Get task by ID (public)
-  getTaskById: async (id: string): Promise<Task> => {
+  getTaskById: async (id: string | number): Promise<Task> => {
     const response = await fetch(`${API_BASE}/tasks/${id}`);
     if (!response.ok) throw new Error('Failed to fetch task');
     return response.json();
@@ -44,7 +44,7 @@ export const taskApi = {
   },
 
   // Update task (auth required)
-  updateTask: async (token: string, id: string, data: { title?: string; description?: string; completed?: boolean }): Promise<Task> => {
+  updateTask: async (token: string, id: string | number, data: { title?: string; description?: string; completed?: boolean }): Promise<Task> => {
     const response = await fetch(`${API_BASE}/tasks/${id}`, {
       method: 'PUT',
       headers: {
@@ -61,7 +61,7 @@ export const taskApi = {
   },
 
   // Delete task (auth required)
-  deleteTask: async (token: string, id: string): Promise<void> => {
+  deleteTask: async (token: string, id: string | number): Promise<void> => {
     const response = await fetch(`${API_BASE}/tasks/${id}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` },

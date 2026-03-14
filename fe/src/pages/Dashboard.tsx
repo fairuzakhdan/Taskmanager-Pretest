@@ -17,12 +17,12 @@ export default function Dashboard() {
     setShowForm(false);
   };
 
-  const handleUpdateTask = async (id: string, taskData: { title?: string; description?: string; completed?: boolean }) => {
+  const handleUpdateTask = async (id: number, taskData: { title?: string; description?: string; completed?: boolean }) => {
     await updateTask({ id, data: taskData });
     setEditingTask(null);
   };
 
-  const handleDeleteTask = async (id: string) => {
+  const handleDeleteTask = async (id: number) => {
     if (!confirm('Are you sure you want to delete this task?')) return;
     await deleteTask(id);
   };

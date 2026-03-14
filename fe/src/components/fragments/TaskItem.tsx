@@ -1,32 +1,38 @@
 import type { Task } from '../../types';
-import { Text, Badge, Button } from '../elements';
+import Badge from '../elements/Badge';
 
 interface TaskItemProps {
   task: Task;
   onEdit: (task: Task) => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ task, onEdit, onDelete }) => {
   return (
     <>
-      <Text variant="h3">{task.title}</Text>
+      <h3 className="font-semibold text-lg">{task.title}</h3>
       {task.description && (
-        <Text variant="body" color="secondary">
+        <p className="text-gray-600 text-sm mt-1">
           {task.description}
-        </Text>
+        </p>
       )}
       <div className="flex justify-between items-center mt-2">
-        <Badge variant={task.status === 'completed' ? 'success' : 'warning'}>
-          {task.status}
+        <Badge variant={task.completed ? 'success' : 'warning'}>
+          {task.completed ? 'Completed' : 'Pending'}
         </Badge>
         <div className="space-x-2">
-          <Button size="sm" variant="secondary" onClick={() => onEdit(task)}>
+          <button 
+            className="px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 rounded"
+            onClick={() => onEdit(task)}
+          >
             Edit
-          </Button>
-          <Button size="sm" variant="danger" onClick={() => onDelete(task.id)}>
+          </button>
+          <button 
+            className="px-3 py-1 text-sm bg-red-500 hover:bg-red-600 text-white rounded"
+            onClick={() => onDelete(task.id)}
+          >
             Delete
-          </Button>
+          </button>
         </div>
       </div>
     </>

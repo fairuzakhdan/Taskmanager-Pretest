@@ -31,7 +31,7 @@ export default function ProfilePage() {
       if (formData.email !== user.email) updateData.email = formData.email;
       if (formData.password) updateData.password = formData.password;
 
-      const updated = await userApi.updateProfile(token, Number(user.id), updateData);
+      const updated = await userApi.updateProfile(token, user.id, updateData);
       updateUser(updated);
       setSuccess('Profile updated successfully');
       setIsEditing(false);

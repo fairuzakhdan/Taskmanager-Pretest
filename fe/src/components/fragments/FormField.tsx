@@ -1,4 +1,5 @@
-import { Label, Input } from '../elements';
+import Label from '../elements/Label';
+import Input from '../elements/Input';
 
 interface FormFieldProps {
   label: string;

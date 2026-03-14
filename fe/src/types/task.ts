@@ -1,11 +1,16 @@
 export interface Task {
-  id: string;
+  id: number;
   title: string;
   description?: string;
   completed: boolean;
-  userId: string;
+  userId: number;
   createdAt: string;
   updatedAt: string;
+  user?: {
+    id: number;
+    name: string;
+    email: string;
+  };
 }
 
 export interface CreateTaskData {
