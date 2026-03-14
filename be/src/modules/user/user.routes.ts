@@ -51,17 +51,17 @@ const router = Router();
  *             schema:
  *               type: object
  *               properties:
- *                 error:
+ *                 message:
  *                   type: string
  *             examples:
  *               missingFields:
  *                 summary: Missing required fields
  *                 value:
- *                   error: "Email, password, and name are required"
+ *                   message: "Email, password, and name are required"
  *               emailExists:
  *                 summary: Email already registered
  *                 value:
- *                   error: "Email already exists"
+ *                   message: "Email already exists"
  *       500:
  *         description: Internal server error
  *         content:
@@ -69,7 +69,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: "Internal server error"
+ *               message: "Internal server error"
  */
 router.post('/users', register);
 
@@ -117,7 +117,7 @@ router.post('/users', register);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: Email and password are required
+ *               message: Email and password are required
  *       401:
  *         description: Invalid credentials
  *         content:
@@ -125,7 +125,7 @@ router.post('/users', register);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: Invalid credentials
+ *               message: Invalid credentials
  *       500:
  *         description: Internal server error
  *         content:
@@ -194,7 +194,7 @@ router.get('/users', getAllUsers);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: "Can only view your own profile"
+ *               message: "Can only view your own profile"
  *       404:
  *         description: User not found
  *         content:
@@ -202,7 +202,7 @@ router.get('/users', getAllUsers);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: "User not found"
+ *               message: "User not found"
  *       500:
  *         description: Internal server error
  *         content:
@@ -262,7 +262,7 @@ router.get('/users/:id', authMiddleware, getUserById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: "Can only update your own profile"
+ *               message: "Can only update your own profile"
  *       404:
  *         description: User not found
  *         content:
@@ -270,7 +270,7 @@ router.get('/users/:id', authMiddleware, getUserById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: "User not found"
+ *               message: "User not found"
  *       500:
  *         description: Internal server error
  *         content:
@@ -319,7 +319,7 @@ router.put('/users/:id', authMiddleware, updateUser);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: "Can only delete your own account"
+ *               message: "Can only delete your own account"
  *       404:
  *         description: User not found
  *         content:
@@ -327,7 +327,7 @@ router.put('/users/:id', authMiddleware, updateUser);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: "User not found"
+ *               message: "User not found"
  *       500:
  *         description: Internal server error
  *         content:

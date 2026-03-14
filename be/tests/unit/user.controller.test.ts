@@ -47,12 +47,9 @@ describe('User Controller', () => {
       await register(mockRequest as Request, mockResponse as Response);
 
       expect(mockResponse.status).toHaveBeenCalledWith(201);
-      expect(mockResponse.json).toHaveBeenCalledWith(
-        expect.objectContaining({
-          email: 'test@example.com',
-          name: 'Test User',
-        })
-      );
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: 'User registered successfully',
+      });
     });
 
     it('should return 400 if email already exists', async () => {
@@ -75,7 +72,7 @@ describe('User Controller', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Email already exists',
+        message: 'Email already exists',
       });
     });
   });
@@ -125,7 +122,7 @@ describe('User Controller', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(401);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Invalid credentials',
+        message: 'Invalid credentials',
       });
     });
   });

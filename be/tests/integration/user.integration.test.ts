@@ -42,8 +42,7 @@ describe('User API Integration', () => {
         });
 
       expect(response.status).toBe(201);
-      expect(response.body).toHaveProperty('email', 'test@example.com');
-      expect(response.body).not.toHaveProperty('password');
+      expect(response.body).toHaveProperty('message', 'User registered successfully');
     });
   });
 

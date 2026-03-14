@@ -54,7 +54,7 @@ describe('Task Controller', () => {
 
       expect(mockResponse.status).toHaveBeenCalledWith(400);
       expect(mockResponse.json).toHaveBeenCalledWith({
-        error: 'Title is required',
+        message: 'Title is required',
       });
     });
   });

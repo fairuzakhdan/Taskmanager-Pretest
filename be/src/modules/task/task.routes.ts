@@ -44,7 +44,7 @@ const router = Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: Title is required
+ *               message: Title is required
  *       401:
  *         description: Unauthorized - No token or invalid token
  *         content:
@@ -54,10 +54,10 @@ const router = Router();
  *             examples:
  *               noToken:
  *                 value:
- *                   error: No token provided
+ *                   message: No token provided
  *               invalidToken:
  *                 value:
- *                   error: Invalid token
+ *                   message: Invalid token
  *       500:
  *         description: Internal server error
  *         content:
@@ -174,7 +174,7 @@ router.get('/tasks/my-tasks', authMiddleware, getMyTasks);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: Task not found
+ *               message: Task not found
  *       500:
  *         description: Internal server error
  *         content:
@@ -232,7 +232,7 @@ router.get('/tasks/:id', getTaskById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: Not authorized to update this task
+ *               message: Not authorized to update this task
  *       404:
  *         description: Task not found
  *         content:
@@ -240,7 +240,7 @@ router.get('/tasks/:id', getTaskById);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: Task not found
+ *               message: Task not found
  *       500:
  *         description: Internal server error
  *         content:
@@ -289,7 +289,7 @@ router.put('/tasks/:id', authMiddleware, updateTask);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: Not authorized to delete this task
+ *               message: Not authorized to delete this task
  *       404:
  *         description: Task not found
  *         content:
@@ -297,7 +297,7 @@ router.put('/tasks/:id', authMiddleware, updateTask);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  *             example:
- *               error: Task not found
+ *               message: Task not found
  *       500:
  *         description: Internal server error
  *         content:
