@@ -27,7 +27,7 @@ export const taskApi = {
   },
 
   // Create task (auth required)
-  createTask: async (token: string, data: { title: string; description?: string; status?: string }): Promise<Task> => {
+  createTask: async (token: string, data: { title: string; description?: string; completed?: boolean }): Promise<Task> => {
     const response = await fetch(`${API_BASE}/tasks`, {
       method: 'POST',
       headers: {
@@ -44,7 +44,7 @@ export const taskApi = {
   },
 
   // Update task (auth required)
-  updateTask: async (token: string, id: string, data: { title?: string; description?: string; status?: string }): Promise<Task> => {
+  updateTask: async (token: string, id: string, data: { title?: string; description?: string; completed?: boolean }): Promise<Task> => {
     const response = await fetch(`${API_BASE}/tasks/${id}`, {
       method: 'PUT',
       headers: {

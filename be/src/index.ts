@@ -60,10 +60,6 @@ const server = app.listen(PORT, () => {
   logger.info(`API Documentation available at http://localhost:${PORT}/api-docs`);
 });
 
-server.on('error', (error) => {
-  logger.error('Server error:', error);
-});
-
 process.on('SIGTERM', () => {
   logger.info('SIGTERM signal received: closing HTTP server');
   server.close(() => {

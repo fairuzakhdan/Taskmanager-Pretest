@@ -13,6 +13,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
   logout: () => void;
+  updateUser: (user: User) => void;
   loading: boolean;
 }
 
@@ -36,15 +37,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
   const queryClient = useQueryClient();
 
-  const API_BASE = 'https://taskmanager-pretest-production.up.railway.app/api';
+  const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     const savedUser = localStorage.getItem('user');
     
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+    if (savedToken && savedUser && savedUser !== 'undefined') {
+      try {
+        setToken(savedToken);
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
     }
     setLoading(false);
   }, []);
@@ -58,7 +64,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.error || error.message || 'Login failed');
+      throw new Error(error.message || 'Login failed');
     }
 
     const data = await response.json();
@@ -77,14 +83,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     if (!response.ok) {
       const error = await response.json();
-      throw new Error(error.error || error.message || 'Registration failed');
+      throw new Error(error.message || 'Registration failed');
     }
 
     const data = await response.json();
-    setToken(data.token);
-    setUser(data.user);
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
+    // Return message dari API response
+    return data;
   };
 
   const logout = () => {
@@ -95,8 +99,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     queryClient.clear();
   };
 
+  const updateUser = (updatedUser: User) => {
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, updateUser, loading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -34,17 +34,16 @@ const router = Router();
  *                 example: John Doe
  *     responses:
  *       201:
- *         description: User created successfully
+ *         description: User registered successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  *             example:
- *               id: 1
- *               email: user@example.com
- *               name: John Doe
- *               createdAt: "2026-03-12T04:03:21.717Z"
- *               updatedAt: "2026-03-12T04:03:21.717Z"
+ *               message: "User registered successfully"
  *       400:
  *         description: Bad request
  *         content:

@@ -7,7 +7,7 @@ export const createTask = async (req: AuthRequest, res: Response) => {
     const { title, description, completed = false } = req.body;
 
     if (!title) {
-      return res.status(400).json({ error: 'Title is required' });
+      return res.status(400).json({ message: 'Title is required' });
     }
 
     const task = await prisma.task.create({
@@ -21,9 +21,8 @@ export const createTask = async (req: AuthRequest, res: Response) => {
 
     res.status(201).json(task);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
+    console.error('Error in createTask:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -32,7 +31,8 @@ export const getAllTasks = async (req: Request, res: Response) => {
     const tasks = await prisma.task.findMany({ include: { user: { select: { id: true, name: true, email: true } } } });
     res.json(tasks);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error in getAllTasks:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -41,7 +41,8 @@ export const getMyTasks = async (req: AuthRequest, res: Response) => {
     const tasks = await prisma.task.findMany({ where: { userId: req.userId } });
     res.json(tasks);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error in getMyTasks:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -54,12 +55,13 @@ export const getTaskById = async (req: Request, res: Response) => {
     });
 
     if (!task) {
-      return res.status(404).json({ error: 'Task not found' });
+      return res.status(404).json({ message: 'Task not found' });
     }
 
     res.json(task);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error in getTaskById:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -70,11 +72,11 @@ export const updateTask = async (req: AuthRequest, res: Response) => {
 
     const task = await prisma.task.findUnique({ where: { id } });
     if (!task) {
-      return res.status(404).json({ error: 'Task not found' });
+      return res.status(404).json({ message: 'Task not found' });
     }
 
     if (task.userId !== req.userId) {
-      return res.status(403).json({ error: 'Not authorized to update this task' });
+      return res.status(403).json({ message: 'Not authorized to update this task' });
     }
 
     const updatedTask = await prisma.task.update({
@@ -84,7 +86,8 @@ export const updateTask = async (req: AuthRequest, res: Response) => {
 
     res.json(updatedTask);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error in updateTask:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -94,17 +97,18 @@ export const deleteTask = async (req: AuthRequest, res: Response) => {
 
     const task = await prisma.task.findUnique({ where: { id } });
     if (!task) {
-      return res.status(404).json({ error: 'Task not found' });
+      return res.status(404).json({ message: 'Task not found' });
     }
 
     if (task.userId !== req.userId) {
-      return res.status(403).json({ error: 'Not authorized to delete this task' });
+      return res.status(403).json({ message: 'Not authorized to delete this task' });
     }
 
     await prisma.task.delete({ where: { id } });
     res.json({ message: 'Task deleted successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error in deleteTask:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -114,6 +118,7 @@ export const getUserTasks = async (req: Request, res: Response) => {
     const tasks = await prisma.task.findMany({ where: { userId: id } });
     res.json(tasks);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Error in getUserTasks:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 };
